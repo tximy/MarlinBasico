@@ -36,13 +36,13 @@
  *
  */
 
-#define EEPROM_VERSION "V29"
+#define EEPROM_VERSION "V30"
 
 // Change EEPROM version if these are changed:
 #define EEPROM_OFFSET 100
 
 /**
- * V29 EEPROM Layout:
+ * V30 EEPROM Layout:
  *
  *  100  Version                                   (char x4)
  *  104  EEPROM Checksum                           (uint16_t)
@@ -127,9 +127,10 @@
  * Volumetric Extrusion:                            17 bytes
  *  509  M200 D    volumetric_enabled               (bool)
  *  510  M200 T D  filament_size                    (float x4) (T0..3)
- *
- *  526                                Minimum end-point
- * 1847 (526 + 36 + 9 + 288 + 988)     Maximum end-point
+ *  526  M852      zprobe_xoffset (float)
+ *  530  M853      zprobe_yoffset (float)
+ *  534                                Minimum end-point
+ * 1847 (534? + 36 + 9 + 288 + 988)     Maximum end-point
  *
  */
 #include "Marlin.h"
@@ -287,8 +288,12 @@ void Config_Postprocess() {
     #endif // MESH_BED_LEVELING
 
     #if !HAS_BED_PROBE
+      float zprobe_xoffset = 0;
+      float zprobe_yoffset = 0;
       float zprobe_zoffset = 0;
     #endif
+    EEPROM_WRITE(zprobe_xoffset);
+    EEPROM_WRITE(zprobe_yoffset);
     EEPROM_WRITE(zprobe_zoffset);
 
     //
@@ -536,8 +541,12 @@ void Config_Postprocess() {
       #endif // MESH_BED_LEVELING
 
       #if !HAS_BED_PROBE
+        float zprobe_xoffset = 0;
+        float zprobe_yoffset = 0;
         float zprobe_zoffset = 0;
       #endif
+      EEPROM_READ(zprobe_xoffset);
+      EEPROM_READ(zprobe_yoffset);
       EEPROM_READ(zprobe_zoffset);
 
       //
@@ -753,6 +762,8 @@ void Config_ResetDefault() {
   #endif
 
   #if HAS_BED_PROBE
+    zprobe_xoffset = X_PROBE_OFFSET_FROM_EXTRUDER;
+    zprobe_yoffset = Y_PROBE_OFFSET_FROM_EXTRUDER;
     zprobe_zoffset = Z_PROBE_OFFSET_FROM_EXTRUDER;
   #endif
 
@@ -1178,6 +1189,8 @@ void Config_ResetDefault() {
       }
       CONFIG_ECHO_START;
       SERIAL_ECHOPAIR("  M851 Z", zprobe_zoffset);
+      SERIAL_ECHOPAIR("  M852 X", zprobe_xoffset);
+      SERIAL_ECHOPAIR("  M853 Y", zprobe_yoffset);
       SERIAL_EOL;
     #endif
   }

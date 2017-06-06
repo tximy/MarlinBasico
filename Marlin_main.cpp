@@ -191,6 +191,8 @@
  * M666 - Set delta endstop adjustment. (Requires DELTA)
  * M605 - Set dual x-carriage movement mode: "M605 S<mode> [X<x_offset>] [R<temp_offset>]". (Requires DUAL_X_CARRIAGE)
  * M851 - Set Z probe's Z offset in current units. (Negative = below the nozzle.)
+ * M852 - Set Z probe's X offset in current units. (Negative = below the nozzle.)
+ * M853 - Set Z probe's Y offset in current units. (Negative = below the nozzle.)
  * M907 - Set digital trimpot motor current using axis codes. (Requires a board with digital trimpots)
  * M908 - Control digital trimpot directly. (Requires DAC_STEPPER_CURRENT or DIGIPOTSS_PIN)
  * M909 - Print digipot/DAC current value. (Requires DAC_STEPPER_CURRENT)
@@ -462,6 +464,8 @@ static millis_t stepper_inactive_time = (DEFAULT_STEPPER_DEACTIVE_TIME) * 1000UL
 static uint8_t target_extruder;
 
 #if HAS_BED_PROBE
+  float zprobe_xoffset = X_PROBE_OFFSET_FROM_EXTRUDER;
+  float zprobe_yoffset = Y_PROBE_OFFSET_FROM_EXTRUDER;
   float zprobe_zoffset = Z_PROBE_OFFSET_FROM_EXTRUDER;
 #endif
 
@@ -1494,11 +1498,16 @@ static void set_axis_is_at_home(AxisEnum axis) {
     if (axis == Z_AXIS) {
       #if HOMING_Z_WITH_PROBE
 
+
+        current_position[X_AXIS] -= zprobe_xoffset;
+        current_position[Y_AXIS] -= zprobe_yoffset;
         current_position[Z_AXIS] -= zprobe_zoffset;
 
         #if ENABLED(DEBUG_LEVELING_FEATURE)
           if (DEBUGGING(LEVELING)) {
             SERIAL_ECHOLNPGM("*** Z HOMED WITH PROBE (Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN) ***");
+            SERIAL_ECHOLNPAIR("> zprobe_xoffset = ", zprobe_xoffset);
+            SERIAL_ECHOLNPAIR("> zprobe_yoffset = ", zprobe_yoffset);
             SERIAL_ECHOLNPAIR("> zprobe_zoffset = ", zprobe_zoffset);
           }
         #endif
@@ -2191,7 +2200,7 @@ static void clean_up_after_endstop_or_probe_move() {
     feedrate_mm_s = XY_PROBE_FEEDRATE_MM_S;
 
     // Move the probe to the given XY
-    do_blocking_move_to_xy(x - (X_PROBE_OFFSET_FROM_EXTRUDER), y - (Y_PROBE_OFFSET_FROM_EXTRUDER));
+    do_blocking_move_to_xy(x - (zprobe_xoffset), y - (zprobe_yoffset));
 
     if (DEPLOY_PROBE()) return NAN;
 
@@ -2924,8 +2933,8 @@ bool position_is_reachable(float target[XYZ]
 
   #if HAS_BED_PROBE
     if (by_probe) {
-      dx -= X_PROBE_OFFSET_FROM_EXTRUDER;
-      dy -= Y_PROBE_OFFSET_FROM_EXTRUDER;
+      dx -= zprobe_xoffset;
+      dy -= zprobe_yoffset;
     }
   #endif
 
@@ -3226,23 +3235,23 @@ inline void gcode_G4() {
     #endif
 
     #if HAS_BED_PROBE
-      SERIAL_ECHOPAIR("Probe Offset X:", X_PROBE_OFFSET_FROM_EXTRUDER);
-      SERIAL_ECHOPAIR(" Y:", Y_PROBE_OFFSET_FROM_EXTRUDER);
+      SERIAL_ECHOPAIR("Probe Offset X:", zprobe_xoffset);
+      SERIAL_ECHOPAIR(" Y:", zprobe_yoffset);
       SERIAL_ECHOPAIR(" Z:", zprobe_zoffset);
-      #if (X_PROBE_OFFSET_FROM_EXTRUDER > 0)
+      #if (zprobe_xoffset > 0)
         SERIAL_ECHOPGM(" (Right");
-      #elif (X_PROBE_OFFSET_FROM_EXTRUDER < 0)
+      #elif (zprobe_xoffset < 0)
         SERIAL_ECHOPGM(" (Left");
-      #elif (Y_PROBE_OFFSET_FROM_EXTRUDER != 0)
+      #elif (zprobe_yoffset != 0)
         SERIAL_ECHOPGM(" (Middle");
       #else
         SERIAL_ECHOPGM(" (Aligned With");
       #endif
-      #if (Y_PROBE_OFFSET_FROM_EXTRUDER > 0)
+      #if (zprobe_yoffset > 0)
         SERIAL_ECHOPGM("-Back");
-      #elif (Y_PROBE_OFFSET_FROM_EXTRUDER < 0)
+      #elif (zprobe_yoffset < 0)
         SERIAL_ECHOPGM("-Front");
-      #elif (X_PROBE_OFFSET_FROM_EXTRUDER != 0)
+      #elif (zprobe_xoffset != 0)
         SERIAL_ECHOPGM("-Center");
       #endif
       if (zprobe_zoffset < 0)
@@ -3376,8 +3385,8 @@ inline void gcode_G4() {
     ) {
 
       #if HOMING_Z_WITH_PROBE
-        destination[X_AXIS] -= X_PROBE_OFFSET_FROM_EXTRUDER;
-        destination[Y_AXIS] -= Y_PROBE_OFFSET_FROM_EXTRUDER;
+        destination[X_AXIS] -= zprobe_xoffset;
+        destination[Y_AXIS] -= zprobe_yoffset;
       #endif
 
       #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -4357,8 +4366,8 @@ inline void gcode_G28() {
         planner.abl_enabled = false;
 
         // Use the last measured distance to the bed, if possible
-        if ( NEAR(current_position[X_AXIS], xProbe - (X_PROBE_OFFSET_FROM_EXTRUDER))
-          && NEAR(current_position[Y_AXIS], yProbe - (Y_PROBE_OFFSET_FROM_EXTRUDER))
+        if ( NEAR(current_position[X_AXIS], xProbe - (zprobe_xoffset))
+          && NEAR(current_position[Y_AXIS], yProbe - (zprobe_yoffset))
         ) {
           float simple_z = current_position[Z_AXIS] - (measured_z - (-zprobe_zoffset));
           #if ENABLED(DEBUG_LEVELING_FEATURE)
@@ -4433,8 +4442,8 @@ inline void gcode_G28() {
    *     S = Stows the probe if 1 (default=1)
    */
   inline void gcode_G30() {
-    float X_probe_location = code_seen('X') ? code_value_axis_units(X_AXIS) : current_position[X_AXIS] + X_PROBE_OFFSET_FROM_EXTRUDER,
-          Y_probe_location = code_seen('Y') ? code_value_axis_units(Y_AXIS) : current_position[Y_AXIS] + Y_PROBE_OFFSET_FROM_EXTRUDER;
+    float X_probe_location = code_seen('X') ? code_value_axis_units(X_AXIS) : current_position[X_AXIS] + zprobe_xoffset,
+          Y_probe_location = code_seen('Y') ? code_value_axis_units(Y_AXIS) : current_position[Y_AXIS] + zprobe_yoffset;
 
     float pos[XYZ] = { X_probe_location, Y_probe_location, LOGICAL_Z_POSITION(0) };
     if (!position_is_reachable(pos, true)) return;
@@ -5010,7 +5019,7 @@ inline void gcode_M42() {
 
     bool stow_probe_after_each = code_seen('E');
 
-    float X_probe_location = code_seen('X') ? code_value_axis_units(X_AXIS) : X_current + X_PROBE_OFFSET_FROM_EXTRUDER;
+    float X_probe_location = code_seen('X') ? code_value_axis_units(X_AXIS) : X_current + zprobe_xoffset;
     #if DISABLED(DELTA)
       if (X_probe_location < LOGICAL_X_POSITION(MIN_PROBE_X) || X_probe_location > LOGICAL_X_POSITION(MAX_PROBE_X)) {
         out_of_range_error(PSTR("X"));
@@ -5018,7 +5027,7 @@ inline void gcode_M42() {
       }
     #endif
 
-    float Y_probe_location = code_seen('Y') ? code_value_axis_units(Y_AXIS) : Y_current + Y_PROBE_OFFSET_FROM_EXTRUDER;
+    float Y_probe_location = code_seen('Y') ? code_value_axis_units(Y_AXIS) : Y_current + zprobe_yoffset;
     #if DISABLED(DELTA)
       if (Y_probe_location < LOGICAL_Y_POSITION(MIN_PROBE_Y) || Y_probe_location > LOGICAL_Y_POSITION(MAX_PROBE_Y)) {
         out_of_range_error(PSTR("Y"));
@@ -5106,8 +5115,8 @@ inline void gcode_M42() {
           while (angle < 0.0)     // outside of this range.   It looks like they behave correctly with
             angle += 360.0;       // numbers outside of the range, but just to be safe we clamp them.
 
-          X_current = X_probe_location - (X_PROBE_OFFSET_FROM_EXTRUDER) + cos(RADIANS(angle)) * radius;
-          Y_current = Y_probe_location - (Y_PROBE_OFFSET_FROM_EXTRUDER) + sin(RADIANS(angle)) * radius;
+          X_current = X_probe_location - (zprobe_xoffset) + cos(RADIANS(angle)) * radius;
+          Y_current = Y_probe_location - (zprobe_yoffset) + sin(RADIANS(angle)) * radius;
 
           #if DISABLED(DELTA)
             X_current = constrain(X_current, X_MIN_POS, X_MAX_POS);
@@ -6255,8 +6264,7 @@ inline void gcode_M203() {
       planner.max_feedrate_mm_s[a] = code_value_axis_units(a);
     }
 }
-
-/**
+/*
  * M204: Set Accelerations in units/sec^2 (M204 P1200 R3000 T3000)
  *
  *    P = Printing moves
@@ -7251,6 +7259,21 @@ inline void gcode_M503() {
     SERIAL_EOL;
   }
 
+  inline void gcode_M852() {
+
+    if (code_seen('X')) {
+      float value = code_value_axis_units(X_AXIS);
+        zprobe_xoffset = value;
+      }
+  }
+
+  inline void gcode_M853() {
+
+    if (code_seen('Y')) {
+      float value = code_value_axis_units(Y_AXIS);
+        zprobe_yoffset = value;
+      }
+  }
 #endif // HAS_BED_PROBE
 
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
@@ -8701,6 +8724,12 @@ void process_next_command() {
       #if HAS_BED_PROBE
         case 851: // M851: Set Z Probe Z Offset
           gcode_M851();
+          break;
+        case 852: // M852: Set Z Probe X Offset
+          gcode_M852();
+          break;
+        case 853: // M853: Set Z Probe Y Offset
+          gcode_M853();
           break;
       #endif // HAS_BED_PROBE
 

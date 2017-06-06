@@ -345,6 +345,8 @@ float code_value_temp_diff();
 #endif
 
 #if HAS_BED_PROBE
+  extern float zprobe_xoffset;
+  extern float zprobe_yoffset;
   extern float zprobe_zoffset;
 #endif
 
