@@ -261,7 +261,7 @@
  */
 
 #define TEMP_SENSOR_0 1 // 11
-#define TEMP_SENSOR_1 1
+#define TEMP_SENSOR_1 1    // 1  998
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_BED 60 // 1 deshabilitado para pruebas
@@ -310,10 +310,10 @@
 
 // Comment the following line to disable PID and enable bang-bang.
 #define PIDTEMP
-#define BANG_MAX 255 // limits current to nozzle while in bang-bang mode; 255=full current
+#define BANG_MAX 255 //255 // limits current to nozzle while in bang-bang mode; 255=full current
 #define PID_MAX BANG_MAX // limits current to nozzle while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #if ENABLED(PIDTEMP)
-  //#define PID_AUTOTUNE_MENU // Add PID Autotune to the LCD "Temperature" menu to run M303 and apply the result.
+  #define PID_AUTOTUNE_MENU // Add PID Autotune to the LCD "Temperature" menu to run M303 and apply the result.
   //#define PID_DEBUG // Sends debug data to the serial port.
   //#define PID_OPENLOOP 1 // Puts PID in open loop. M104/M140 sets the output power from 0 to PID_MAX
   #define SLOW_PWM_HEATERS // PWM with very low frequency (roughly 0.125Hz=8s) and minimum state time of approximately 1s useful for heaters driven by a relay
@@ -324,11 +324,246 @@
   #define K1 0.95 //smoothing factor within the PID
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
+/*
+ * dual vulcano e0 
+Recv:  Classic PID
+Recv:  Kp: 11.39 Ki: 0.57 Kd: 56.80
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 11.39
+Recv: #define  DEFAULT_Ki 0.57
+Recv: #define  DEFAULT_Kd 56.80
+M301 E0 P11.39 I0.57 D56.80
+
+Recv:  Classic PID
+Recv:  Kp: 7.78 Ki: 0.35 Kd: 42.62
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 7.78
+Recv: #define  DEFAULT_Ki 0.35
+Recv: #define  DEFAULT_Kd 42.62
+M301 E0 P7.78 I0.35 D42.62
+
+Recv:  Classic PID
+Recv:  Kp: 22.35 Ki: 1.82 Kd: 68.66
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 22.35
+Recv: #define  DEFAULT_Ki 1.82
+Recv: #define  DEFAULT_Kd 68.66
+M301 E0 P22.35 I1.82 D68.66
+
+Recv:  Classic PID
+Recv:  Kp: 13.40 Ki: 0.77 Kd: 58.64
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 13.40
+Recv: #define  DEFAULT_Ki 0.77
+Recv: #define  DEFAULT_Kd 58.64
+M301 E0 P13.40 I0.77 D58.64
+
+Recv:  Classic PID
+Recv:  Kp: 92.25 Ki: 18.05 Kd: 117.88
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 92.25
+Recv: #define  DEFAULT_Ki 18.05
+Recv: #define  DEFAULT_Kd 117.88
+M301 E0 P92.25 I18.05 D117.88
+
+Recv:  Classic PID
+Recv:  Kp: 8.99 Ki: 0.46 Kd: 43.51
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 8.99
+Recv: #define  DEFAULT_Ki 0.46
+Recv: #define  DEFAULT_Kd 43.51
+M301 E0 P8.99 I0.46 D43.51
+
+Recv:  Classic PID
+Recv:  Kp: 10.76 Ki: 0.66 Kd: 43.91
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 10.76
+Recv: #define  DEFAULT_Ki 0.66
+Recv: #define  DEFAULT_Kd 43.91
+M301 E0 P10.76 I0.66 D43.91
+
+
+dual vulcano e1
+Recv:  Classic PID
+Recv:  Kp: 9.05 Ki: 0.50 Kd: 41.14
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 9.05
+Recv: #define  DEFAULT_Ki 0.50
+Recv: #define  DEFAULT_Kd 41.14
+M301 E1 P9.05 I0.50 D41.14
+
+Recv:  Classic PID
+Recv:  Kp: 8.47 Ki: 0.46 Kd: 38.94
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 8.47
+Recv: #define  DEFAULT_Ki 0.46
+Recv: #define  DEFAULT_Kd 38.94
+M301 E1 P8.47 I0.46 D38.94
+
+Recv:  Classic PID
+Recv:  Kp: 9.74 Ki: 0.56 Kd: 42.36
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 9.74
+Recv: #define  DEFAULT_Ki 0.56
+Recv: #define  DEFAULT_Kd 42.36
+M301 E1 P9.74 I0.56 D42.36
+
+Recv:  Classic PID
+Recv:  Kp: 9.02 Ki: 0.50 Kd: 40.36
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 9.02
+Recv: #define  DEFAULT_Ki 0.50
+Recv: #define  DEFAULT_Kd 40.36
+M301 E1 P9.02 I0.50 D40.36
+
+Recv:  Classic PID
+Recv:  Kp: 7.68 Ki: 0.46 Kd: 31.89
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 7.68
+Recv: #define  DEFAULT_Ki 0.46
+Recv: #define  DEFAULT_Kd 31.89
+M301 E1 P7.68 I0.46 D31.89
+
+Recv:  Classic PID
+Recv:  Kp: 5.63 Ki: 0.28 Kd: 28.77
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 5.63
+Recv: #define  DEFAULT_Ki 0.28
+Recv: #define  DEFAULT_Kd 28.77
+M301 E1 P5.63 I0.28 D28.77
+
+
+ITTY DIRECTO 3MM E3DV6 0.4
+Recv:  Classic PID
+Recv:  Kp: 10.21 Ki: 0.88 Kd: 29.62
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 10.21
+Recv: #define  DEFAULT_Ki 0.88
+Recv: #define  DEFAULT_Kd 29.62
+M301 E0 P10.21 I0.88 D29.62
+
+Recv:  Classic PID
+Recv:  Kp: 6.38 Ki: 0.32 Kd: 31.81
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 6.38
+Recv: #define  DEFAULT_Ki 0.32
+Recv: #define  DEFAULT_Kd 31.81
+M301 E0 P6.38 I0.32 D31.81
+
+Recv:  Classic PID
+Recv:  Kp: 8.28 Ki: 0.51 Kd: 33.56
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 8.28
+Recv: #define  DEFAULT_Ki 0.51
+Recv: #define  DEFAULT_Kd 33.56
+M301 E0 P8.28 I0.51 D33.56
+
+Recv:  Classic PID
+Recv:  Kp: 5.07 Ki: 0.23 Kd: 28.40
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 5.07
+Recv: #define  DEFAULT_Ki 0.23
+Recv: #define  DEFAULT_Kd 28.40
+M301 E0 P5.07 I0.23 D28.40
+
+Recv:  Classic PID
+Recv:  Kp: 11.93 Ki: 1.33 Kd: 26.70
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 11.93
+Recv: #define  DEFAULT_Ki 1.33
+Recv: #define  DEFAULT_Kd 26.70
+M301 E0 P11.93 I1.33 D26.70
+
+Recv:  Classic PID
+Recv:  Kp: 16.19 Ki: 0.80 Kd: 82.34
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 16.19
+Recv: #define  DEFAULT_Ki 0.80
+Recv: #define  DEFAULT_Kd 82.34
+M301 E0 P16.19 I0.80 D82.34
+
+Recv:  Classic PID
+Recv:  Kp: 15.54 Ki: 1.46 Kd: 41.24
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 15.54
+Recv: #define  DEFAULT_Ki 1.46
+Recv: #define  DEFAULT_Kd 41.24
+M301 E0 P15.54 I1.46 D41.24
+
+Recv:  Classic PID
+Recv:  Kp: 11.34 Ki: 0.98 Kd: 32.86
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 11.34
+Recv: #define  DEFAULT_Ki 0.98
+Recv: #define  DEFAULT_Kd 32.86
+M301 E0 P11.34 I0.98 D32.86
+
+
+
+NUEVO BOWDEN VERDE  3MMM
+Recv:  Classic PID
+Recv:  Kp: 18.71 Ki: 2.09 Kd: 41.83
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd cons from below into Configuration.h
+Recv: #define  DEFAULT_Kp 18.71
+Recv: #define  DEFAULT_Ki 2.09
+Recv: #define  DEFAULT_Kd 41.83
+M301 E0 P18.71 I2.09 D41.83
+
+Recv:  Classic PID
+Recv:  Kp: 23.25 Ki: 2.69 Kd: 50.28
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 23.25
+Recv: #define  DEFAULT_Ki 2.69
+Recv: #define  DEFAULT_Kd 50.28
+M301 E0 P23.25 I2.69 D50.28
+M301 E0 P23.25 I2.69 D50.28
+M301 E0 P14.90 I1.61 D34.42
+
+M851 Z-0.40
+M852 X-56
+M853 Y-44
+M206 X-68.8 Y-84.2 Z0;
+M92 E0245
+M301 E0 P14.90 I1.61 D34.42
+M500
+M117 !!Conmutador ARRIBA!
+
+
+Recv:  Classic PID
+Recv:  Kp: 5.05 Ki: 0.24 Kd: 27.07
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 5.05
+Recv: #define  DEFAULT_Ki 0.24
+Recv: #define  DEFAULT_Kd 27.07
+M301 E0 P5.05 I0.24 D27.07
+
+Recv:  Classic PID
+Recv:  Kp: 14.67 Ki: 1.52 Kd: 35.34
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 14.67
+Recv: #define  DEFAULT_Ki 1.52
+Recv: #define  DEFAULT_Kd 35.34
+M301 E0 P14.67 I1.52 D35.34
+
+
+
+
+
+DIAMOND
+M301 E0 P14.67 I1.52 D35.34
+
+
+
+  */
+ #define  DEFAULT_Kp 17.79
+ #define  DEFAULT_Ki 0.62
+ #define  DEFAULT_Kd 125.94
+  /*
   // Ultimaker
   #define  DEFAULT_Kp 22.2
   #define  DEFAULT_Ki 1.08
   #define  DEFAULT_Kd 114
-
+*/
   // MakerGear
   //#define  DEFAULT_Kp 7.0
   //#define  DEFAULT_Ki 0.1
@@ -488,7 +723,7 @@
 
 // Enable this feature if all enabled endstop pins are interrupt-capable.
 // This will remove the need to poll the interrupt pins, saving many CPU cycles.
-//#define ENDSTOP_INTERRUPTS_FEATURE
+#define ENDSTOP_INTERRUPTS_FEATURE
 
 //=============================================================================
 //============================== Movement Settings ============================
@@ -518,6 +753,30 @@
 
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {160,160,200,208,170,170,170}  //208 gregwades directo polea//170  MK8//191 BULLDOG//245 e0 con polea 16/90/227.38 GREGS 47/9//Husillos Z dos extruseres 1 greg 3mm 2 bulldog175  //abs rosa 3mm 47=>9 985 default steps per unit for Ultimaker//#define DEFAULT_MAX_FEEDRATE          {300, 300, 5, 25}    // (mm/sec)
 
+//Tximy3D1  X  => 160.00 x 1/32 polea 20 dientes GT2
+//Tximy3D1  Y  => 160.00 x 1/32 polea 20 dientes GT2
+//Tximy3D1  Z  => 200.00 x 1/8  Husilloa T8D8 8mm/vuelta
+//Tximy3D1  E0 => 208.00 x 1/8  gregwades directo polea
+//Tximy3D1  E1 => 170.00 x 1/32 Mk8 directo 1.75
+
+
+//Tximy3D2  X  => 266.67 x 1/16 Husilloa T8D12 12mm/vuelta
+//Tximy3D2  Y  => 266.67 x 1/16 Husilloa T8D12 12mm/vuelta
+//Tximy3D2  Z  => 266.67 x 1/16 Husilloa T8D12 12mm/vuelta
+//Tximy3D2  E0 => 832.00 x 1/32  Itty polea Gt2 16/60 //// 1340.00 x 1/32 Extrusor 3mm amarillo polea GT2 20/60 ////  170.00 x 1/32 Mk8 directo 1.75 //// 191.00 x 1/32 BULLDOG
+//Tximy3D2  E1 => 170.00 x 1/32 Mk8 directo 1.75
+//Tximy3D2  E2 => 170.00 x 1/32 Mk8 directo 1.75
+
+// microsteps  X x32,Y x32, Z x8  // nuevos husillos avance 12mm por vuelta X x16=>266.67
+// microsteps  X x32,Y x32, Z x8  // nuevos husillos avance 12mm por vuelta X x16=>266.67
+//M92 E670 ; 20/60 EXTRUSOR AMARILLO X16 => E335 X8  /// // 208.00 x 1/8  Itty polea Gt2 16/60
+///;M92 E335 ; 670 20/60 EXTRUSOR AMARILLO X16 => E335 X8------------ 25 VEL MAX Z NUEVO
+///VXJERK1 Y1 Z 022   VMAX X130 Y110 Z 30 ACCEL X 1900 Y 1100 Z 400
+
+// microsteps  X x32,Y x32, Z x8  // nuevos husillos avance 12mm por vuelta X x16=>266.67
+//M92 E670 ; 20/60 EXTRUSOR AMARILLO X16 => E335 X8
+///;M92 E335 ; 670 20/60 EXTRUSOR AMARILLO X16 => E335 X8------------ 25 VEL MAX Z NUEVO
+///VXJERK1 Y1 Z 022   VMAX X130 Y110 Z 30 ACCEL X 1900 Y 1100 Z 400
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
@@ -855,7 +1114,7 @@ M851 X52 Y35 Z-1.70
 #define X_MIN_POS 0
 #define Y_MIN_POS 0 
 #define Z_MIN_POS 0
-#define X_MAX_POS 244  //  203 cadenas dual hotend vulcano capacitivo // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define X_MAX_POS 300//237 //-28mm al acercar el FC de la cama 244  203 cadenas dual hotend vulcano capacitivo // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
 #define Y_MAX_POS 410  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
 #define Z_MAX_POS 245  // con cadenas // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
 
@@ -969,8 +1228,8 @@ M851 X52 Y35 Z-1.70
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
   #define FIL_RUNOUT_INVERTING true // set to true to invert the logic of the sensor.
   #define ENDSTOPPULLUP_FIL_RUNOUT // Uncomment to use internal pullup for filament runout pins if the sensor is defined.
-//#define FILAMENT_RUNOUT_SCRIPT "M600"
-  #define FILAMENT_RUNOUT_SCRIPT "G1 X-44 F8000\nM25"
+  #define FILAMENT_RUNOUT_SCRIPT "M600"
+  //#define FILAMENT_RUNOUT_SCRIPT "G1 X-44 F8000\nM25"
 
 
 #endif
@@ -1066,11 +1325,11 @@ M851 X52 Y35 Z-1.70
 #define BACK_PROBE_BED_POSITION 255  //cama 300x200
 */
 
-//  a 0000    -14 -82   son posiciones absolutas sobre 0 en fc
-#define LEFT_PROBE_BED_POSITION 10  // cama 200x200
-#define RIGHT_PROBE_BED_POSITION 134  // cama 200x200 185 // cama 300x200 eje z nuevo 165
-#define FRONT_PROBE_BED_POSITION 112  // cama 300x200
-#define BACK_PROBE_BED_POSITION 340  //cama 300x200
+//  a 0000     son posiciones absolutas sobre 0 en fc
+#define LEFT_PROBE_BED_POSITION 60  // cama 200x200  10
+#define RIGHT_PROBE_BED_POSITION 160  // cama 200x200 185 // cama 300x200 eje z nuevo 165
+#define FRONT_PROBE_BED_POSITION 84  // cama 300x200 112
+#define BACK_PROBE_BED_POSITION 312  //cama 300x200 340
 
 /*
 // 3mm gregs directo
@@ -1126,7 +1385,7 @@ M851 X52 Y35 Z-1.70
     // Experimental Subdivision of the grid by Catmull-Rom method.
     // Synthesizes intermediate points to produce a more detailed mesh.
     //
-    //#define ABL_BILINEAR_SUBDIVISION
+    #define ABL_BILINEAR_SUBDIVISION
     #if ENABLED(ABL_BILINEAR_SUBDIVISION)
       // Number of subdivisions between probe points
       #define BILINEAR_SUBDIVISIONS 3
@@ -1153,7 +1412,7 @@ M851 X52 Y35 Z-1.70
  */
 //#define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
 //#define Z_PROBE_END_SCRIPT "M500\nG1 Z5 Y-20 X0 F12000\nM420 S1" // Graba ajustes en la eeprom centra la cama y aparca el hotend y aplica correcciones   //  para cristal de 300x200
-#define Z_PROBE_END_SCRIPT "G1 Z5 Y-20 X0 F12000\nM420 S1" // Graba ajustes en la eeprom centra la cama y aparca el hotend y aplica correcciones   //  para cristal de 300x200
+#define Z_PROBE_END_SCRIPT "G1 Z5 Y-20 X1 F12000\nM420 S1" // Graba ajustes en la eeprom centra la cama y aparca el hotend y aplica correcciones   //  para cristal de 300x200
 
 
 // @section homing
@@ -1289,6 +1548,9 @@ M851 X52 Y35 Z-1.70
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z }
   #define NOZZLE_PARK_POINT { (X_MIN_POS + 10), (Y_MAX_POS - 10), 20 }
+#endif
+#if ENABLED(DEBUG_V_SALIDA)
+    #define value 3.0  // para pruebas de calibracion del voltaje de salida
 #endif
 
 //

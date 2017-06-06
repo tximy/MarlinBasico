@@ -74,8 +74,8 @@
  * If you get false positives for "Thermal Runaway" increase THERMAL_PROTECTION_HYSTERESIS and/or THERMAL_PROTECTION_PERIOD
  */
 #if ENABLED(THERMAL_PROTECTION_HOTENDS)
-  #define THERMAL_PROTECTION_PERIOD 80        // Seconds
-  #define THERMAL_PROTECTION_HYSTERESIS 3     // Degrees Celsius
+  #define THERMAL_PROTECTION_PERIOD 40        // Seconds
+  #define THERMAL_PROTECTION_HYSTERESIS 2     // Degrees Celsius
 
   /**
    * Whenever an M104 or M109 increases the target temperature the firmware will wait for the
@@ -86,7 +86,7 @@
    * If you get false positives for "Heating failed" increase WATCH_TEMP_PERIOD and/or decrease WATCH_TEMP_INCREASE
    * WATCH_TEMP_INCREASE should not be below 2.
    */
-  #define WATCH_TEMP_PERIOD 40                // Seconds
+  #define WATCH_TEMP_PERIOD 20                // Seconds
   #define WATCH_TEMP_INCREASE 2               // Degrees Celsius
 #endif
 
@@ -196,12 +196,12 @@
 // When first starting the main fan, run it at full speed for the
 // given number of milliseconds.  This gets the fan spinning reliably
 // before setting a PWM value. (Does not work with software PWM for fan on Sanguinololu)
-//#define FAN_KICKSTART_TIME 100
+#define FAN_KICKSTART_TIME 250
 
 // This defines the minimal speed for the main fan, run in PWM mode
 // to enable uncomment and set minimal PWM speed for reliable running (1-255)
 // if fan speed is [1 - (FAN_MIN_PWM-1)] it is set to FAN_MIN_PWM
-//#define FAN_MIN_PWM 50
+#define FAN_MIN_PWM 50
 
 // @section extruder
 
@@ -672,23 +672,23 @@
  */
 #define FILAMENT_CHANGE_FEATURE
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
-  #define FILAMENT_CHANGE_X_POS -40            // X position of hotend
-  #define FILAMENT_CHANGE_Y_POS -55             // Y position of hotend
+  #define FILAMENT_CHANGE_X_POS 100            // X position of hotend
+  #define FILAMENT_CHANGE_Y_POS -20             // Y position of hotend
   #define FILAMENT_CHANGE_Z_ADD 10            // Z addition of hotend (lift)
   #define FILAMENT_CHANGE_XY_FEEDRATE 100     // X and Y axes feedrate in mm/s (also used for delta printers Z axis)
   #define FILAMENT_CHANGE_Z_FEEDRATE 5        // Z axis feedrate in mm/s (not used for delta printers)
   #define FILAMENT_CHANGE_RETRACT_LENGTH 2    // Initial retract in mm
                                               // It is a short retract used immediately after print interrupt before move to filament exchange position
   #define FILAMENT_CHANGE_RETRACT_FEEDRATE 400/60 // Initial retract feedrate in mm/s
-  #define FILAMENT_CHANGE_UNLOAD_LENGTH 620   // Unload filament length from hotend in mm
+  #define FILAMENT_CHANGE_UNLOAD_LENGTH 690   // Unload filament length from hotend in mm
                                               // Longer length for bowden printers to unload filament from whole bowden tube,
                                               // shorter lenght for printers without bowden to unload filament from extruder only,
                                               // 0 to disable unloading for manual unloading
-  #define FILAMENT_CHANGE_UNLOAD_FEEDRATE 500/60  // Unload filament feedrate in mm/s - filament unloading can be fast
-  #define FILAMENT_CHANGE_LOAD_LENGTH 565      // Load filament length over hotend in mm
+  #define FILAMENT_CHANGE_UNLOAD_FEEDRATE 1500/60  // Unload filament feedrate in mm/s - filament unloading can be fast
+  #define FILAMENT_CHANGE_LOAD_LENGTH 690      // Load filament length over hotend in mm
                                               // Longer length for bowden printers to fast load filament into whole bowden tube over the hotend,
                                               // Short or zero length for printers without bowden where loading is not used
-  #define FILAMENT_CHANGE_LOAD_FEEDRATE 500/60    // Load filament feedrate in mm/s - filament loading into the bowden tube can be fast
+  #define FILAMENT_CHANGE_LOAD_FEEDRATE 1500/60    // Load filament feedrate in mm/s - filament loading into the bowden tube can be fast
   #define FILAMENT_CHANGE_EXTRUDE_LENGTH 50   // Extrude filament length in mm after filament is load over the hotend,
                                               // 0 to disable for manual extrusion
                                               // Filament can be extruded repeatedly from the filament exchange menu to fill the hotend,
@@ -1071,7 +1071,7 @@
 // @section i2cbus
 
 //#define EXPERIMENTAL_I2CBUS
-#define I2C_SLAVE_ADDRESS  0 // Set a value from 8 to 127 to act as a slave
+//#define I2C_SLAVE_ADDRESS  0 // Set a value from 8 to 127 to act as a slave
 
 /**
  * Add M43 command for pins info and testing
@@ -1081,11 +1081,11 @@
 /**
  * Auto-report temperatures with M155 S<seconds>
  */
-//#define AUTO_REPORT_TEMPERATURES
+#define AUTO_REPORT_TEMPERATURES
 
 /**
  * Include capabilities in M115 output
  */
-//#define EXTENDED_CAPABILITIES_REPORT
+#define EXTENDED_CAPABILITIES_REPORT
 
 #endif // CONFIGURATION_ADV_H
