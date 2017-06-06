@@ -62,21 +62,21 @@
 #else
   #define SERVO0_PIN       11
 #endif
-#define SERVO1_PIN          6
-#define SERVO2_PIN          5
-#define SERVO3_PIN          4
+//#define SERVO1_PIN          6
+//#define SERVO2_PIN          5
+//#define SERVO3_PIN          4//ojo, lo uso para el ventilador de capa
 
 //
 // Limit Switches
 //
 #define X_MIN_PIN           3
 #ifndef X_MAX_PIN
-  #define X_MAX_PIN         2
+  #define X_MAX_PIN         -1//2 lo uso para las luces
 #endif
 #define Y_MIN_PIN          14
-#define Y_MAX_PIN          15
+#define Y_MAX_PIN          -1   // 15 antes era el 15 pero lo utilizo para el ventilador del segundo hotend
 #define Z_MIN_PIN          18
-#define Z_MAX_PIN          19
+#define Z_MAX_PIN          -1 //era el 19 pero lo cogi para el sensor de filamento
 
 //
 // Z Probe (when not Z_MIN_PIN)
@@ -202,7 +202,7 @@
 #define FILWIDTH_PIN        5   // Analog Input
 
 // define digital pin 4 for the filament runout sensor. Use the RAMPS 1.4 digital input 4 on the servos connector
-#define FIL_RUNOUT_PIN      4
+#define FIL_RUNOUT_PIN      19
 
 #define PS_ON_PIN          12
 

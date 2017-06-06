@@ -74,8 +74,8 @@
  * If you get false positives for "Thermal Runaway" increase THERMAL_PROTECTION_HYSTERESIS and/or THERMAL_PROTECTION_PERIOD
  */
 #if ENABLED(THERMAL_PROTECTION_HOTENDS)
-  #define THERMAL_PROTECTION_PERIOD 40        // Seconds
-  #define THERMAL_PROTECTION_HYSTERESIS 4     // Degrees Celsius
+  #define THERMAL_PROTECTION_PERIOD 80        // Seconds
+  #define THERMAL_PROTECTION_HYSTERESIS 3     // Degrees Celsius
 
   /**
    * Whenever an M104 or M109 increases the target temperature the firmware will wait for the
@@ -86,7 +86,7 @@
    * If you get false positives for "Heating failed" increase WATCH_TEMP_PERIOD and/or decrease WATCH_TEMP_INCREASE
    * WATCH_TEMP_INCREASE should not be below 2.
    */
-  #define WATCH_TEMP_PERIOD 20                // Seconds
+  #define WATCH_TEMP_PERIOD 40                // Seconds
   #define WATCH_TEMP_INCREASE 2               // Degrees Celsius
 #endif
 
@@ -189,7 +189,7 @@
 //This is for controlling a fan to cool down the stepper drivers
 //it will turn on when any driver is enabled
 //and turn off after the set amount of seconds from last driver being disabled again
-#define CONTROLLERFAN_PIN -1 //Pin used for the fan to cool controller (-1 to disable)
+#define CONTROLLERFAN_PIN 5 //Pin used for the fan to cool controller (-1 to disable)
 #define CONTROLLERFAN_SECS 60 //How many seconds, after all motors were disabled, the fan should run
 #define CONTROLLERFAN_SPEED 255  // == full speed
 
@@ -217,19 +217,21 @@
  * Multiple extruders can be assigned to the same pin in which case
  * the fan will turn on when any selected extruder is above the threshold.
  */
-#define E0_AUTO_FAN_PIN -1
-#define E1_AUTO_FAN_PIN -1
+#define E0_AUTO_FAN_PIN 6
+#define E1_AUTO_FAN_PIN 15 // correspondia al y max
 #define E2_AUTO_FAN_PIN -1
 #define E3_AUTO_FAN_PIN -1
-#define EXTRUDER_AUTO_FAN_TEMPERATURE 50
+#define EXTRUDER_AUTO_FAN_TEMPERATURE 60
 #define EXTRUDER_AUTO_FAN_SPEED   255  // == full speed
 
+
 // Define a pin to turn case light on/off
-//#define CASE_LIGHT_PIN 4
+#define CASE_LIGHT_PIN 2        // M355 S1 or M355 S0 to switch On / Off  M42 P2 S255 S0
 #if PIN_EXISTS(CASE_LIGHT)
   #define INVERT_CASE_LIGHT false   // Set to true if HIGH is the OFF state (active low)
-  //#define CASE_LIGHT_DEFAULT_ON   // Uncomment to set default state to on
-  //#define MENU_ITEM_CASE_LIGHT    // Uncomment to have a Case Light On / Off entry in main menu
+  #define CASE_LIGHT_DEFAULT_BRIGHTNESS 30
+  #define CASE_LIGHT_DEFAULT_ON // Uncomment to set default state to on
+  #define MENU_ITEM_CASE_LIGHT    // Uncomment to have a Case Light On / Off entry in main menu
 #endif
 
 //===========================================================================
@@ -356,10 +358,10 @@
 // Default stepper release if idle. Set to 0 to deactivate.
 // Steppers will shut down DEFAULT_STEPPER_DEACTIVE_TIME seconds after the last move when DISABLE_INACTIVE_? is true.
 // Time can be set by M18 and M84.
-#define DEFAULT_STEPPER_DEACTIVE_TIME 120
+#define DEFAULT_STEPPER_DEACTIVE_TIME 360
 #define DISABLE_INACTIVE_X true
 #define DISABLE_INACTIVE_Y true
-#define DISABLE_INACTIVE_Z true  // set to false if the nozzle will fall down on your printed part when print has finished.
+#define DISABLE_INACTIVE_Z false // set to false if the nozzle will fall down on your printed part when print has finished.
 #define DISABLE_INACTIVE_E true
 
 #define DEFAULT_MINIMUMFEEDRATE       0.0     // minimum feedrate
@@ -368,7 +370,8 @@
 // @section lcd
 
 #if ENABLED(ULTIPANEL)
-  #define MANUAL_FEEDRATE {50*60, 50*60, 4*60, 60} // Feedrates for manual moves along X, Y, Z, E from panel
+  //#define MANUAL_FEEDRATE {50*60, 50*60, 4*60, 60} // Feedrates for manual moves along X, Y, Z, E from panel
+    #define MANUAL_FEEDRATE {15000, 15000, 1800, 100} // Feedrates for manual moves along X, Y, Z, E from pane
   #define ULTIPANEL_FEEDMULTIPLY  // Comment to disable setting feedrate multiplier via encoder
 #endif
 
@@ -383,7 +386,7 @@
 // Frequency limit
 // See nophead's blog for more info
 // Not working O
-//#define XY_FREQUENCY_LIMIT  15
+#define XY_FREQUENCY_LIMIT  15
 
 // Minimum planner junction speed. Sets the default minimum speed the planner plans for at the end
 // of the buffer and all stops. This should not be much greater than zero and should only be changed
@@ -420,10 +423,10 @@
 // @section lcd
 
 // Include a page of printer information in the LCD Main Menu
-//#define LCD_INFO_MENU
+#define LCD_INFO_MENU
 
 // On the Info Screen, display XY with one decimal place when possible
-//#define LCD_DECIMAL_SMALL_XY
+#define LCD_DECIMAL_SMALL_XY
 
 #if ENABLED(SDSUPPORT)
 
@@ -432,7 +435,7 @@
   // as SD_DETECT_PIN in your board's pins definitions.
   // This setting should be disabled unless you are using a push button, pulling the pin to ground.
   // Note: This is always disabled for ULTIPANEL (except ELB_FULL_GRAPHIC_CONTROLLER).
-  #define SD_DETECT_INVERTED
+  //#define SD_DETECT_INVERTED
 
   #define SD_FINISHED_STEPPERRELEASE true  //if sd support and the file is finished: disable steppers?
   #define SD_FINISHED_RELEASECOMMAND "M84 X Y Z E" // You might want to keep the z enabled so your bed stays in place.
@@ -440,7 +443,7 @@
   #define SDCARD_RATHERRECENTFIRST  //reverse file order of sd card menu display. Its sorted practically after the file system block order.
   // if a file is deleted, it frees a block. hence, the order is not purely chronological. To still have auto0.g accessible, there is again the option to do that.
   // using:
-  //#define MENU_ADDAUTOSTART
+  #define MENU_ADDAUTOSTART
 
   // Show a progress bar on HD44780 LCDs for SD printing
   //#define LCD_PROGRESS_BAR
@@ -459,7 +462,7 @@
   #endif
 
   // This allows hosts to request long names for files and folders with M33
-  //#define LONG_FILENAME_HOST_SUPPORT
+  #define LONG_FILENAME_HOST_SUPPORT
 
   // This option allows you to abort SD printing when any endstop is triggered.
   // This feature must be enabled with "M540 S1" or from the LCD menu.
@@ -637,7 +640,7 @@
 //#define NO_TIMEOUTS 1000 // Milliseconds
 
 // Some clients will have this feature soon. This could make the NO_TIMEOUTS unnecessary.
-//#define ADVANCED_OK
+#define ADVANCED_OK
 
 // @section fwretract
 
@@ -667,25 +670,25 @@
  * Requires an LCD display.
  * This feature is required for the default FILAMENT_RUNOUT_SCRIPT.
  */
-//#define FILAMENT_CHANGE_FEATURE
+#define FILAMENT_CHANGE_FEATURE
 #if ENABLED(FILAMENT_CHANGE_FEATURE)
-  #define FILAMENT_CHANGE_X_POS 3             // X position of hotend
-  #define FILAMENT_CHANGE_Y_POS 3             // Y position of hotend
+  #define FILAMENT_CHANGE_X_POS -40            // X position of hotend
+  #define FILAMENT_CHANGE_Y_POS -55             // Y position of hotend
   #define FILAMENT_CHANGE_Z_ADD 10            // Z addition of hotend (lift)
   #define FILAMENT_CHANGE_XY_FEEDRATE 100     // X and Y axes feedrate in mm/s (also used for delta printers Z axis)
   #define FILAMENT_CHANGE_Z_FEEDRATE 5        // Z axis feedrate in mm/s (not used for delta printers)
   #define FILAMENT_CHANGE_RETRACT_LENGTH 2    // Initial retract in mm
                                               // It is a short retract used immediately after print interrupt before move to filament exchange position
-  #define FILAMENT_CHANGE_RETRACT_FEEDRATE 60 // Initial retract feedrate in mm/s
-  #define FILAMENT_CHANGE_UNLOAD_LENGTH 100   // Unload filament length from hotend in mm
+  #define FILAMENT_CHANGE_RETRACT_FEEDRATE 400/60 // Initial retract feedrate in mm/s
+  #define FILAMENT_CHANGE_UNLOAD_LENGTH 620   // Unload filament length from hotend in mm
                                               // Longer length for bowden printers to unload filament from whole bowden tube,
                                               // shorter lenght for printers without bowden to unload filament from extruder only,
                                               // 0 to disable unloading for manual unloading
-  #define FILAMENT_CHANGE_UNLOAD_FEEDRATE 10  // Unload filament feedrate in mm/s - filament unloading can be fast
-  #define FILAMENT_CHANGE_LOAD_LENGTH 0       // Load filament length over hotend in mm
+  #define FILAMENT_CHANGE_UNLOAD_FEEDRATE 500/60  // Unload filament feedrate in mm/s - filament unloading can be fast
+  #define FILAMENT_CHANGE_LOAD_LENGTH 565      // Load filament length over hotend in mm
                                               // Longer length for bowden printers to fast load filament into whole bowden tube over the hotend,
                                               // Short or zero length for printers without bowden where loading is not used
-  #define FILAMENT_CHANGE_LOAD_FEEDRATE 10    // Load filament feedrate in mm/s - filament loading into the bowden tube can be fast
+  #define FILAMENT_CHANGE_LOAD_FEEDRATE 500/60    // Load filament feedrate in mm/s - filament loading into the bowden tube can be fast
   #define FILAMENT_CHANGE_EXTRUDE_LENGTH 50   // Extrude filament length in mm after filament is load over the hotend,
                                               // 0 to disable for manual extrusion
                                               // Filament can be extruded repeatedly from the filament exchange menu to fill the hotend,
@@ -1084,15 +1087,5 @@
  * Include capabilities in M115 output
  */
 //#define EXTENDED_CAPABILITIES_REPORT
-
-
-/**
- * Volumetric extrusion default state
- * Activate to make volumetric extrusion the default method,
- * with DEFAULT_NOMINAL_FILAMENT_DIA as the default diameter.
- *
- * M200 D0 to disable, M200 Dn to set a new diameter.
- */ 
-//#define VOLUMETRIC_DEFAULT_ON
 
 #endif // CONFIGURATION_ADV_H
