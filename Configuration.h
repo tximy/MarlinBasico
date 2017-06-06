@@ -130,23 +130,25 @@
 // The following define selects which electronics board you have.
 // Please choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  #define MOTHERBOARD BOARD_RAMPS_14_EEB
 #endif
 
 // Optional custom name for your RepStrap or other custom machine
 // Displayed in the LCD "Ready" message
 //#define CUSTOM_MACHINE_NAME "3D Printer"
+#define CUSTOM_MACHINE_NAME "AregoCW Tximy3D1"
 
 // Define this to set a unique identifier for this printer, (Used by some programs to differentiate between machines)
 // You can use an online service to generate a random UUID. (eg http://www.uuidgenerator.net/version4)
 //#define MACHINE_UUID "00000000-0000-0000-0000-000000000000"
+#define MACHINE_UUID "9c69c89b-988c-4a4e-abf7-ee39d8fba651"
 
 // This defines the number of extruders
 // :[1, 2, 3, 4]
-#define EXTRUDERS 1
+#define EXTRUDERS 2
 
 // Enable if your E steppers or extruder gear ratios are not identical
-//#define DISTINCT_E_FACTORS
+#define DISTINCT_E_FACTORS
 
 // For Cyclops or any "multi-extruder" that shares a single nozzle.
 //#define SINGLENOZZLE
@@ -180,7 +182,9 @@
 // For the other hotends it is their distance from the extruder 0 hotend.
 //#define HOTEND_OFFSET_X {0.0, 20.00} // (in mm) for each extruder, offset of the hotend on the X axis
 //#define HOTEND_OFFSET_Y {0.0, 5.00}  // (in mm) for each extruder, offset of the hotend on the Y axis
-
+#define HOTEND_OFFSET_X {0.0, 34.90} // (in mm) for each extruder, offset of the hotend on the X axis //dual volcano 0.00 34.90 //itty 27.00
+#define HOTEND_OFFSET_Y {0.0, 0.80}  // (in mm) for each extruder, offset of the hotend on the Y axis //dual volcano 0.00 0.80 //itty -22.00
+//ITTY CORREA M218 T0 27.00 -22.00 0.00
 /**
  * Select your power supply here. Use 0 if you haven't connected the PS_ON_PIN
  *
@@ -190,7 +194,7 @@
  *
  * :{ 0:'No power switch', 1:'ATX', 2:'X-Box 360' }
  */
-#define POWER_SUPPLY 0
+#define POWER_SUPPLY 1
 
 #if POWER_SUPPLY > 0
   // Enable this option to leave the PSU off at startup.
@@ -248,12 +252,19 @@
  *   999 : Dummy Table that ALWAYS reads 100°C or the temperature defined below.
  *
  * :{ '0': "Not used", '1':"100k / 4.7k - EPCOS", '2':"200k / 4.7k - ATC Semitec 204GT-2", '3':"Mendel-parts / 4.7k", '4':"10k !! do not use for a hotend. Bad resolution at high temp. !!", '5':"100K / 4.7k - ATC Semitec 104GT-2 (Used in ParCan & J-Head)", '6':"100k / 4.7k EPCOS - Not as accurate as Table 1", '7':"100k / 4.7k Honeywell 135-104LAG-J01", '8':"100k / 4.7k 0603 SMD Vishay NTCS0603E3104FXT", '9':"100k / 4.7k GE Sensing AL03006-58.2K-97-G1", '10':"100k / 4.7k RS 198-961", '11':"100k / 4.7k beta 3950 1%", '12':"100k / 4.7k 0603 SMD Vishay NTCS0603E3104FXT (calibrated for Makibox hot bed)", '13':"100k Hisens 3950  1% up to 300°C for hotend 'Simple ONE ' & hotend 'All In ONE'", '20':"PT100 (Ultimainboard V2.x)", '51':"100k / 1k - EPCOS", '52':"200k / 1k - ATC Semitec 204GT-2", '55':"100k / 1k - ATC Semitec 104GT-2 (Used in ParCan & J-Head)", '60':"100k Maker's Tool Works Kapton Bed Thermistor beta=3950", '66':"Dyze Design 4.7M High Temperature thermistor", '70':"the 100K thermistor found in the bq Hephestos 2", '71':"100k / 4.7k Honeywell 135-104LAF-J01", '147':"Pt100 / 4.7k", '1047':"Pt1000 / 4.7k", '110':"Pt100 / 1k (non-standard)", '1010':"Pt1000 / 1k (non standard)", '-3':"Thermocouple + MAX31855 (only for sensor 0)", '-2':"Thermocouple + MAX6675 (only for sensor 0)", '-1':"Thermocouple + AD595",'998':"Dummy 1", '999':"Dummy 2" }
- */
+
 #define TEMP_SENSOR_0 1
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
 #define TEMP_SENSOR_BED 0
+ */
+
+#define TEMP_SENSOR_0 1 // 11
+#define TEMP_SENSOR_1 1    // 1  998
+#define TEMP_SENSOR_2 0
+#define TEMP_SENSOR_3 0
+#define TEMP_SENSOR_BED 60 // 1 deshabilitado para pruebas
 
 // Dummy thermistor constant temperature readings, for use with 998 and 999
 #define DUMMY_THERMISTOR_998_VALUE 25
@@ -278,7 +289,7 @@
 // to check that the wiring to the thermistor is not broken.
 // Otherwise this would lead to the heater being powered on all the time.
 #define HEATER_0_MINTEMP 5
-#define HEATER_1_MINTEMP 5
+#define HEATER_1_MINTEMP -15
 #define HEATER_2_MINTEMP 5
 #define HEATER_3_MINTEMP 5
 #define BED_MINTEMP 5
@@ -299,25 +310,260 @@
 
 // Comment the following line to disable PID and enable bang-bang.
 #define PIDTEMP
-#define BANG_MAX 255 // limits current to nozzle while in bang-bang mode; 255=full current
+#define BANG_MAX 255 //255 // limits current to nozzle while in bang-bang mode; 255=full current
 #define PID_MAX BANG_MAX // limits current to nozzle while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #if ENABLED(PIDTEMP)
-  //#define PID_AUTOTUNE_MENU // Add PID Autotune to the LCD "Temperature" menu to run M303 and apply the result.
+  #define PID_AUTOTUNE_MENU // Add PID Autotune to the LCD "Temperature" menu to run M303 and apply the result.
   //#define PID_DEBUG // Sends debug data to the serial port.
   //#define PID_OPENLOOP 1 // Puts PID in open loop. M104/M140 sets the output power from 0 to PID_MAX
-  //#define SLOW_PWM_HEATERS // PWM with very low frequency (roughly 0.125Hz=8s) and minimum state time of approximately 1s useful for heaters driven by a relay
-  //#define PID_PARAMS_PER_HOTEND // Uses separate PID parameters for each extruder (useful for mismatched extruders)
+  #define SLOW_PWM_HEATERS // PWM with very low frequency (roughly 0.125Hz=8s) and minimum state time of approximately 1s useful for heaters driven by a relay
+  #define PID_PARAMS_PER_HOTEND // Uses separate PID parameters for each extruder (useful for mismatched extruders)
                                   // Set/get with gcode: M301 E[extruder number, 0-2]
   #define PID_FUNCTIONAL_RANGE 10 // If the temperature difference between the target temperature and the actual temperature
                                   // is more than PID_FUNCTIONAL_RANGE then the PID will be shut off and the heater will be set to min/max.
   #define K1 0.95 //smoothing factor within the PID
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
+/*
+ * dual vulcano e0 
+Recv:  Classic PID
+Recv:  Kp: 11.39 Ki: 0.57 Kd: 56.80
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 11.39
+Recv: #define  DEFAULT_Ki 0.57
+Recv: #define  DEFAULT_Kd 56.80
+M301 E0 P11.39 I0.57 D56.80
+
+Recv:  Classic PID
+Recv:  Kp: 7.78 Ki: 0.35 Kd: 42.62
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 7.78
+Recv: #define  DEFAULT_Ki 0.35
+Recv: #define  DEFAULT_Kd 42.62
+M301 E0 P7.78 I0.35 D42.62
+
+Recv:  Classic PID
+Recv:  Kp: 22.35 Ki: 1.82 Kd: 68.66
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 22.35
+Recv: #define  DEFAULT_Ki 1.82
+Recv: #define  DEFAULT_Kd 68.66
+M301 E0 P22.35 I1.82 D68.66
+
+Recv:  Classic PID
+Recv:  Kp: 13.40 Ki: 0.77 Kd: 58.64
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 13.40
+Recv: #define  DEFAULT_Ki 0.77
+Recv: #define  DEFAULT_Kd 58.64
+M301 E0 P13.40 I0.77 D58.64
+
+Recv:  Classic PID
+Recv:  Kp: 92.25 Ki: 18.05 Kd: 117.88
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 92.25
+Recv: #define  DEFAULT_Ki 18.05
+Recv: #define  DEFAULT_Kd 117.88
+M301 E0 P92.25 I18.05 D117.88
+
+Recv:  Classic PID
+Recv:  Kp: 8.99 Ki: 0.46 Kd: 43.51
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 8.99
+Recv: #define  DEFAULT_Ki 0.46
+Recv: #define  DEFAULT_Kd 43.51
+M301 E0 P8.99 I0.46 D43.51
+
+Recv:  Classic PID
+Recv:  Kp: 10.76 Ki: 0.66 Kd: 43.91
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 10.76
+Recv: #define  DEFAULT_Ki 0.66
+Recv: #define  DEFAULT_Kd 43.91
+M301 E0 P10.76 I0.66 D43.91
+
+
+dual vulcano e1
+Recv:  Classic PID
+Recv:  Kp: 9.05 Ki: 0.50 Kd: 41.14
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 9.05
+Recv: #define  DEFAULT_Ki 0.50
+Recv: #define  DEFAULT_Kd 41.14
+M301 E1 P9.05 I0.50 D41.14
+
+Recv:  Classic PID
+Recv:  Kp: 8.47 Ki: 0.46 Kd: 38.94
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 8.47
+Recv: #define  DEFAULT_Ki 0.46
+Recv: #define  DEFAULT_Kd 38.94
+M301 E1 P8.47 I0.46 D38.94
+
+Recv:  Classic PID
+Recv:  Kp: 9.74 Ki: 0.56 Kd: 42.36
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 9.74
+Recv: #define  DEFAULT_Ki 0.56
+Recv: #define  DEFAULT_Kd 42.36
+M301 E1 P9.74 I0.56 D42.36
+
+Recv:  Classic PID
+Recv:  Kp: 9.02 Ki: 0.50 Kd: 40.36
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 9.02
+Recv: #define  DEFAULT_Ki 0.50
+Recv: #define  DEFAULT_Kd 40.36
+M301 E1 P9.02 I0.50 D40.36
+
+Recv:  Classic PID
+Recv:  Kp: 7.68 Ki: 0.46 Kd: 31.89
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 7.68
+Recv: #define  DEFAULT_Ki 0.46
+Recv: #define  DEFAULT_Kd 31.89
+M301 E1 P7.68 I0.46 D31.89
+
+Recv:  Classic PID
+Recv:  Kp: 5.63 Ki: 0.28 Kd: 28.77
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 5.63
+Recv: #define  DEFAULT_Ki 0.28
+Recv: #define  DEFAULT_Kd 28.77
+M301 E1 P5.63 I0.28 D28.77
+
+
+ITTY DIRECTO 3MM E3DV6 0.4
+Recv:  Classic PID
+Recv:  Kp: 10.21 Ki: 0.88 Kd: 29.62
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 10.21
+Recv: #define  DEFAULT_Ki 0.88
+Recv: #define  DEFAULT_Kd 29.62
+M301 E0 P10.21 I0.88 D29.62
+
+Recv:  Classic PID
+Recv:  Kp: 6.38 Ki: 0.32 Kd: 31.81
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 6.38
+Recv: #define  DEFAULT_Ki 0.32
+Recv: #define  DEFAULT_Kd 31.81
+M301 E0 P6.38 I0.32 D31.81
+
+Recv:  Classic PID
+Recv:  Kp: 8.28 Ki: 0.51 Kd: 33.56
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 8.28
+Recv: #define  DEFAULT_Ki 0.51
+Recv: #define  DEFAULT_Kd 33.56
+M301 E0 P8.28 I0.51 D33.56
+
+Recv:  Classic PID
+Recv:  Kp: 5.07 Ki: 0.23 Kd: 28.40
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 5.07
+Recv: #define  DEFAULT_Ki 0.23
+Recv: #define  DEFAULT_Kd 28.40
+M301 E0 P5.07 I0.23 D28.40
+
+Recv:  Classic PID
+Recv:  Kp: 11.93 Ki: 1.33 Kd: 26.70
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 11.93
+Recv: #define  DEFAULT_Ki 1.33
+Recv: #define  DEFAULT_Kd 26.70
+M301 E0 P11.93 I1.33 D26.70
+
+Recv:  Classic PID
+Recv:  Kp: 16.19 Ki: 0.80 Kd: 82.34
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 16.19
+Recv: #define  DEFAULT_Ki 0.80
+Recv: #define  DEFAULT_Kd 82.34
+M301 E0 P16.19 I0.80 D82.34
+
+Recv:  Classic PID
+Recv:  Kp: 15.54 Ki: 1.46 Kd: 41.24
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 15.54
+Recv: #define  DEFAULT_Ki 1.46
+Recv: #define  DEFAULT_Kd 41.24
+M301 E0 P15.54 I1.46 D41.24
+
+Recv:  Classic PID
+Recv:  Kp: 11.34 Ki: 0.98 Kd: 32.86
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 11.34
+Recv: #define  DEFAULT_Ki 0.98
+Recv: #define  DEFAULT_Kd 32.86
+M301 E0 P11.34 I0.98 D32.86
+
+
+
+NUEVO BOWDEN VERDE  3MMM
+Recv:  Classic PID
+Recv:  Kp: 18.71 Ki: 2.09 Kd: 41.83
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd cons from below into Configuration.h
+Recv: #define  DEFAULT_Kp 18.71
+Recv: #define  DEFAULT_Ki 2.09
+Recv: #define  DEFAULT_Kd 41.83
+M301 E0 P18.71 I2.09 D41.83
+
+Recv:  Classic PID
+Recv:  Kp: 23.25 Ki: 2.69 Kd: 50.28
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 23.25
+Recv: #define  DEFAULT_Ki 2.69
+Recv: #define  DEFAULT_Kd 50.28
+M301 E0 P23.25 I2.69 D50.28
+M301 E0 P23.25 I2.69 D50.28
+M301 E0 P14.90 I1.61 D34.42
+
+M851 Z-0.40
+M852 X-56
+M853 Y-44
+M206 X-68.8 Y-84.2 Z0;
+M92 E0245
+M301 E0 P14.90 I1.61 D34.42
+M500
+M117 !!Conmutador ARRIBA!
+
+
+Recv:  Classic PID
+Recv:  Kp: 5.05 Ki: 0.24 Kd: 27.07
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 5.05
+Recv: #define  DEFAULT_Ki 0.24
+Recv: #define  DEFAULT_Kd 27.07
+M301 E0 P5.05 I0.24 D27.07
+
+Recv:  Classic PID
+Recv:  Kp: 14.67 Ki: 1.52 Kd: 35.34
+Recv: PID Autotune finished! Put the last Kp, Ki and Kd constants from below into Configuration.h
+Recv: #define  DEFAULT_Kp 14.67
+Recv: #define  DEFAULT_Ki 1.52
+Recv: #define  DEFAULT_Kd 35.34
+M301 E0 P14.67 I1.52 D35.34
+
+
+
+
+
+DIAMOND
+M301 E0 P14.67 I1.52 D35.34
+
+
+
+  */
+ #define  DEFAULT_Kp 17.79
+ #define  DEFAULT_Ki 0.62
+ #define  DEFAULT_Kd 125.94
+  /*
   // Ultimaker
   #define  DEFAULT_Kp 22.2
   #define  DEFAULT_Ki 1.08
   #define  DEFAULT_Kd 114
-
+*/
   // MakerGear
   //#define  DEFAULT_Kp 7.0
   //#define  DEFAULT_Ki 0.1
@@ -344,7 +590,7 @@
 // If this is enabled, find your own PID constants below.
 //#define PIDTEMPBED
 
-//#define BED_LIMIT_SWITCHING
+#define BED_LIMIT_SWITCHING
 
 // This sets the max power delivered to the bed, and replaces the HEATER_BED_DUTY_CYCLE_DIVIDER option.
 // all forms of bed control obey this (PID, bang-bang, bang-bang with hysteresis)
@@ -383,7 +629,7 @@
 // This option prevents a single extrusion longer than EXTRUDE_MAXLENGTH.
 // Note that for Bowden Extruders a too-small value here may prevent loading.
 #define PREVENT_LENGTHY_EXTRUDE
-#define EXTRUDE_MAXLENGTH 200
+#define EXTRUDE_MAXLENGTH 700
 
 //===========================================================================
 //======================== Thermal Runaway Protection =======================
@@ -402,7 +648,7 @@
  */
 
 #define THERMAL_PROTECTION_HOTENDS // Enable thermal protection for all extruders
-#define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
+//#define THERMAL_PROTECTION_BED     // Enable thermal protection for the heated bed
 
 //===========================================================================
 //============================= Mechanical Settings =========================
@@ -439,7 +685,7 @@
 //#define USE_ZMAX_PLUG
 
 // coarse Endstop Settings
-#define ENDSTOPPULLUPS // Comment this out (using // at the start of the line) to disable the endstop pullup resistors
+//#define ENDSTOPPULLUPS // Comment this out (using // at the start of the line) to disable the endstop pullup resistors
 
 #if DISABLED(ENDSTOPPULLUPS)
   // fine endstop settings: Individual pullups. will be ignored if ENDSTOPPULLUPS is defined
@@ -450,9 +696,13 @@
   //#define ENDSTOPPULLUP_YMIN
   //#define ENDSTOPPULLUP_ZMIN
   //#define ENDSTOPPULLUP_ZMIN_PROBE
+  #define ENDSTOPPULLUP_XMIN
+  #define ENDSTOPPULLUP_YMIN
+  #define ENDSTOPPULLUP_ZMIN
 #endif
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
+/*
 #define X_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
 #define Y_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
 #define Z_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
@@ -460,10 +710,20 @@
 #define Y_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
 #define Z_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
 #define Z_MIN_PROBE_ENDSTOP_INVERTING false // set to true to invert the logic of the probe.
+*/
+
+#define X_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop. true para mecanico false para optico
+#define Y_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+#define Z_MIN_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.Ojo true mecanico y false optico //false con inductivo azul y true con inductivo amarillo
+#define X_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define Y_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
+#define Z_MAX_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.  
+#define Z_MIN_PROBE_ENDSTOP_INVERTING true // set to true to invert the logic of the endstop.
+
 
 // Enable this feature if all enabled endstop pins are interrupt-capable.
 // This will remove the need to poll the interrupt pins, saving many CPU cycles.
-//#define ENDSTOP_INTERRUPTS_FEATURE
+#define ENDSTOP_INTERRUPTS_FEATURE
 
 //=============================================================================
 //============================== Movement Settings ============================
@@ -486,14 +746,45 @@
  * Override with M92
  *                                      X, Y, Z, E0 [, E1[, E2[, E3]]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 4000, 500 }
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 4000, 500 }
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {160,160,200,227.38,191,1823,1823}  //Husillos Z dos extruseres 1 greg 3mm 2 bulldog175  //abs rosa 3mm 47=>9 985 default steps per unit for Ultimaker//#define DEFAULT_MAX_FEEDRATE          {300, 300, 5, 25}    // (mm/sec)
 
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   {160,160,200,245,170,170,170}  //170  MK8//191 BULLDOG//245 e0 con polea 16/90/227.38 GREGS 47/9//Husillos Z dos extruseres 1 greg 3mm 2 bulldog175  //abs rosa 3mm 47=>9 985 default steps per unit for Ultimaker//#define DEFAULT_MAX_FEEDRATE          {300, 300, 5, 25}    // (mm/sec)
+
+#define DEFAULT_AXIS_STEPS_PER_UNIT   {160,160,200,208,170,170,170}  //208 gregwades directo polea//170  MK8//191 BULLDOG//245 e0 con polea 16/90/227.38 GREGS 47/9//Husillos Z dos extruseres 1 greg 3mm 2 bulldog175  //abs rosa 3mm 47=>9 985 default steps per unit for Ultimaker//#define DEFAULT_MAX_FEEDRATE          {300, 300, 5, 25}    // (mm/sec)
+
+//Tximy3D1  X  => 160.00 x 1/32 polea 20 dientes GT2
+//Tximy3D1  Y  => 160.00 x 1/32 polea 20 dientes GT2
+//Tximy3D1  Z  => 200.00 x 1/8  Husilloa T8D8 8mm/vuelta
+//Tximy3D1  E0 => 208.00 x 1/8  gregwades directo polea
+//Tximy3D1  E1 => 170.00 x 1/32 Mk8 directo 1.75
+
+
+//Tximy3D2  X  => 266.67 x 1/16 Husilloa T8D12 12mm/vuelta
+//Tximy3D2  Y  => 266.67 x 1/16 Husilloa T8D12 12mm/vuelta
+//Tximy3D2  Z  => 266.67 x 1/16 Husilloa T8D12 12mm/vuelta
+//Tximy3D2  E0 => 832.00 x 1/32  Itty polea Gt2 16/60 //// 1340.00 x 1/32 Extrusor 3mm amarillo polea GT2 20/60 ////  170.00 x 1/32 Mk8 directo 1.75 //// 191.00 x 1/32 BULLDOG
+//Tximy3D2  E1 => 170.00 x 1/32 Mk8 directo 1.75
+//Tximy3D2  E2 => 170.00 x 1/32 Mk8 directo 1.75
+
+// microsteps  X x32,Y x32, Z x8  // nuevos husillos avance 12mm por vuelta X x16=>266.67
+// microsteps  X x32,Y x32, Z x8  // nuevos husillos avance 12mm por vuelta X x16=>266.67
+//M92 E670 ; 20/60 EXTRUSOR AMARILLO X16 => E335 X8  /// // 208.00 x 1/8  Itty polea Gt2 16/60
+///;M92 E335 ; 670 20/60 EXTRUSOR AMARILLO X16 => E335 X8------------ 25 VEL MAX Z NUEVO
+///VXJERK1 Y1 Z 022   VMAX X130 Y110 Z 30 ACCEL X 1900 Y 1100 Z 400
+
+// microsteps  X x32,Y x32, Z x8  // nuevos husillos avance 12mm por vuelta X x16=>266.67
+//M92 E670 ; 20/60 EXTRUSOR AMARILLO X16 => E335 X8
+///;M92 E335 ; 670 20/60 EXTRUSOR AMARILLO X16 => E335 X8------------ 25 VEL MAX Z NUEVO
+///VXJERK1 Y1 Z 022   VMAX X130 Y110 Z 30 ACCEL X 1900 Y 1100 Z 400
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                      X, Y, Z, E0 [, E1[, E2[, E3]]]
  */
-#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
+//#define DEFAULT_MAX_FEEDRATE          { 300, 300, 5, 25 }
+#define DEFAULT_MAX_FEEDRATE          {12000/60, 12000/60, 1860/60, 5000/60, 6000/60, 25, 25}    // 1/32 16000/60 X CON GREG --  16000/60 Y CON CAMA 300X200 IMPRESA+ALU3MM+CRISTAL2MM  --  1/8 1900/60 Z HUSILLOS  --  1/4 2000/60 T0 GREGS WADE 57-9 --(mm/sec) baje a 30 el extrsor para evitar atascos con abs3mm
+
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
@@ -501,7 +792,9 @@
  * Override with M201
  *                                      X, Y, Z, E0 [, E1[, E2[, E3]]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
+//#define DEFAULT_MAX_ACCELERATION      { 3000, 3000, 100, 10000 }
+#define DEFAULT_MAX_ACCELERATION      {2000,2000,2000,2000,2000,1000,1000}    // tenia e E 9000 X, Y, Z, E maximum start speed for accelerated moves. E default values are good for Skeinforge 40+, for older versions raise them a lot
+
 
 /**
  * Default Acceleration (change/s) change = mm/s
@@ -511,9 +804,13 @@
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
  */
-#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E acceleration for printing moves
-#define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration for travel (non printing) moves
+//#define DEFAULT_ACCELERATION          3000    // X, Y, Z and E acceleration for printing moves
+#define DEFAULT_ACCELERATION          1500    // X, Y, Z and E acceleration in mm/s^2 for printing moves
+
+//#define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
+//#define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration for travel (non printing) moves
+#define DEFAULT_RETRACT_ACCELERATION  2000    // tenia 8000 pero con 47/9 lleva 1000 E acceleration in mm/s^2 for retracts
+#define DEFAULT_TRAVEL_ACCELERATION   3000    // X, Y, Z acceleration in mm/s^2 for travel (non printing) moves
 
 /**
  * Default Jerk (mm/s)
@@ -527,6 +824,13 @@
 #define DEFAULT_YJERK                 20.0
 #define DEFAULT_ZJERK                  0.4
 #define DEFAULT_EJERK                  5.0
+/*
+#define DEFAULT_XYJERK                10.0    // (mm/sec)
+#define DEFAULT_ZJERK                 7.0     // (mm/sec)
+//#define DEFAULT_ZJERK                 0.4     // (mm/sec)
+//#define DEFAULT_EJERK                 1.0    // (mm/sec)
+#define DEFAULT_EJERK                 5.0    // (mm/sec)
+*/
 
 
 //===========================================================================
@@ -548,7 +852,7 @@
 // For example an inductive probe, or a setup that uses the nozzle to probe.
 // An inductive probe must be deactivated to go below
 // its trigger-point if hardware endstops are active.
-//#define FIX_MOUNTED_PROBE
+#define FIX_MOUNTED_PROBE
 
 // The BLTouch probe emulates a servo probe.
 // The default connector is SERVO 0. Set Z_ENDSTOP_SERVO_NR below to override.
@@ -579,6 +883,7 @@
 //    |           |
 //    O-- FRONT --+
 //  (0,0)
+/*
 #define X_PROBE_OFFSET_FROM_EXTRUDER 10  // X offset: -left  +right  [of the nozzle]
 #define Y_PROBE_OFFSET_FROM_EXTRUDER 10  // Y offset: -front +behind [the nozzle]
 #define Z_PROBE_OFFSET_FROM_EXTRUDER 0   // Z offset: -below +above  [the nozzle]
@@ -591,6 +896,70 @@
 #define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
 // Use double touch for probing
 //#define PROBE_DOUBLE_TOUCH
+*/
+/*
+//Dual Vulcano
+#define X_PROBE_OFFSET_FROM_EXTRUDER +63  // X offset: -left  +right  [of the nozzle]-35 120= 15
+#define Y_PROBE_OFFSET_FROM_EXTRUDER -11  //+10 Ok cama abs alu 300x200//+12 no llega al centro //antes +17 desplazaba de mas// Y offset: -front +behind [the nozzle]17 109= 8
+//#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.10 // -2.00 dual vulcano inductivo// -1.20 dual y sensor inductivo // -1.10 dual y sensor capacitivo// -0.3 al subir una vuelta inductivo amarillo//-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -2.30 // -2.30 dual vulcano capacitivo // -2.00 dual vulcano inductivo// -1.20 dual y sensor inductivo // -1.10 dual y sensor capacitivo// -0.3 al subir una vuelta inductivo amarillo//-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+*/
+/*
+M218 T0 27.00 -22.00 0.00 
+M565  X52 Y35 Z-1.70 
+;M565  X25 Y13 Z-1.70 
+M851 X52 Y35 Z-1.70
+*/
+
+#define X_PROBE_OFFSET_FROM_EXTRUDER +0  // +46 X offset: -left  +right  [of the nozzle]-35 120= 15
+#define Y_PROBE_OFFSET_FROM_EXTRUDER +0  //+41+10 Ok cama abs alu 300x200//+12 no llega al centro //antes +17 desplazaba de mas// Y offset: -front +behind [the nozzle]17 109= 8
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -2.30 // -1.00 ajustes e3dv6//-0.30 despues de ajustes y arandelas con el Itty  // -0.80 capacitivo bajo //-0.3 al subir una vuelta inductivo amarillo//-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+
+
+/*
+// 3mm Gregs directo
+#define X_PROBE_OFFSET_FROM_EXTRUDER +52  // +46 X offset: -left  +right  [of the nozzle]-35 120= 15
+#define Y_PROBE_OFFSET_FROM_EXTRUDER +35  //+41+10 Ok cama abs alu 300x200//+12 no llega al centro //antes +17 desplazaba de mas// Y offset: -front +behind [the nozzle]17 109= 8
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -2.30 // -1.00 ajustes e3dv6//-0.30 despues de ajustes y arandelas con el Itty  // -0.80 capacitivo bajo //-0.3 al subir una vuelta inductivo amarillo//-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+*/
+
+/*
+//  con plate hotend e3dv6 175mm capa blower induc azul
+#define X_PROBE_OFFSET_FROM_EXTRUDER -35  // X offset: -left  +right  [of the nozzle]-35 120= 15
+#define Y_PROBE_OFFSET_FROM_EXTRUDER +10  //+10 Ok cama abs alu 300x200//+12 no llega al centro //antes +17 desplazaba de mas// Y offset: -front +behind [the nozzle]17 109= 8
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.2 //-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+*/
+/*  con plate hotend e3dv6 3mm capa blower induc azul
+#define X_PROBE_OFFSET_FROM_EXTRUDER -36  // X offset: -left  +right  [of the nozzle]-35 120= 15
+#define Y_PROBE_OFFSET_FROM_EXTRUDER +10  //+10 Ok cama abs alu 300x200//+12 no llega al centro //antes +17 desplazaba de mas// Y offset: -front +behind [the nozzle]17 109= 8
+#define Z_PROBE_OFFSET_FROM_EXTRUDER +0.50 //-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+*/
+/*
+// 3mm Gregs directo
+#define X_PROBE_OFFSET_FROM_EXTRUDER +52  // +46 X offset: -left  +right  [of the nozzle]-35 120= 15
+#define Y_PROBE_OFFSET_FROM_EXTRUDER +35  //+41+10 Ok cama abs alu 300x200//+12 no llega al centro //antes +17 desplazaba de mas// Y offset: -front +behind [the nozzle]17 109= 8
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -1.45 // -2.3 capacitivo  //-0.3 al subir una vuelta inductivo amarillo//-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+*/
+
+/* OK bowden dual
+#define X_PROBE_OFFSET_FROM_EXTRUDER +63  // X offset: -left  +right  [of the nozzle]-35 120= 15
+#define Y_PROBE_OFFSET_FROM_EXTRUDER -11  //+10 Ok cama abs alu 300x200//+12 no llega al centro //antes +17 desplazaba de mas// Y offset: -front +behind [the nozzle]17 109= 8
+#define Z_PROBE_OFFSET_FROM_EXTRUDER -2.6 // -0.3 al subir una vuelta inductivo amarillo//-0.2 cambio de nozzle//-0.9  Ok g29//-0.3 Ok g28 //positivo sube el nozzle y negativo baja//Z offset: -below +above  [the nozzle] 0 y ajusto con el eje z +0.1 Ok E3DV6 PLA 1.75 Y PLACA CERAMICA//-0.5 justo con ceramica
+*/
+
+
+
+// X and Y axis travel speed (mm/m) between probes
+#define XY_PROBE_SPEED 15000
+// Speed for the first approach when double-probing (with PROBE_DOUBLE_TOUCH)
+#define Z_PROBE_SPEED_FAST HOMING_FEEDRATE_Z
+// Speed for the "accurate" probe of each point
+#define Z_PROBE_SPEED_SLOW (Z_PROBE_SPEED_FAST / 2)
+// Use double touch for probing
+#define PROBE_DOUBLE_TOUCH
+
+
+
 
 //
 // Allen Key Probe is defined in the Delta example configurations.
@@ -640,7 +1009,7 @@
 // To use a probe you must enable one of the two options above!
 
 // Enable Z Probe Repeatability test to see how accurate your probe is
-//#define Z_MIN_PROBE_REPEATABILITY_TEST
+#define Z_MIN_PROBE_REPEATABILITY_TEST
 
 /**
  * Z probes require clearance when deploying, stowing, and moving between
@@ -689,7 +1058,7 @@
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
 #define INVERT_X_DIR false
-#define INVERT_Y_DIR true
+#define INVERT_Y_DIR false
 #define INVERT_Z_DIR false
 
 // @section extruder
@@ -703,6 +1072,7 @@
 // @section homing
 
 //#define Z_HOMING_HEIGHT 4  // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
+#define Z_HOMING_HEIGHT 5  // (in mm) Minimal z height before homing (G28) for Z clearance above the bed, clamps, ...
                              // Be sure you have this distance over your Z_MAX_POS in case.
 
 // ENDSTOP SETTINGS:
@@ -712,18 +1082,139 @@
 #define Y_HOME_DIR -1
 #define Z_HOME_DIR -1
 
-#define min_software_endstops true // If true, axis won't move to coordinates less than HOME_POS.
+#define min_software_endstops false // If true, axis won't move to coordinates less than HOME_POS.
 #define max_software_endstops true  // If true, axis won't move to coordinates greater than the defined lengths below.
 
 // @section machine
 
 // Travel limits after homing (units are in mm)
+/*
 #define X_MIN_POS 0
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS 200
 #define Y_MAX_POS 200
 #define Z_MAX_POS 200
+*/
+
+/*
+//OK dual vulcano
+//#define X_MIN_POS -17  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+#define X_MIN_POS -41  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+//#define Y_MIN_POS -69 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+#define Y_MIN_POS -60 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+//#define Z_MIN_POS -17.2 //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define Z_MIN_POS 0 // pruebas home con inductivo //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define X_MAX_POS 203  //  203 cadenas dual hotend vulcano capacitivo // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define Y_MAX_POS 350  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 245  // con cadenas // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+*/
+#define X_MIN_POS 0
+#define Y_MIN_POS 0 
+#define Z_MIN_POS 0
+#define X_MAX_POS 300//237 //-28mm al acercar el FC de la cama 244  203 cadenas dual hotend vulcano capacitivo // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define Y_MAX_POS 410  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 245  // con cadenas // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+
+/*
+//OK dual vulcano
+//#define X_MIN_POS -17  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+#define X_MIN_POS -41  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+//#define Y_MIN_POS -69 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+#define Y_MIN_POS -60 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+//#define Z_MIN_POS -17.2 //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define Z_MIN_POS 0 // pruebas home con inductivo //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define X_MAX_POS 203  //  203 cadenas dual hotend vulcano capacitivo // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define Y_MAX_POS 350  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 245  // con cadenas // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+*/
+
+/*
+// Ok 3mm diecto gregs
+#define X_MIN_POS -14  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+#define Y_MIN_POS -82 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+#define Z_MIN_POS 0 // pruebas home con inductivo //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define X_MAX_POS 228  // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define Y_MAX_POS 360  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 260 // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+*/
+
+/*
+// E3dV6 blower  175 OK
+#define X_MIN_POS -14  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+#define Y_MIN_POS -75 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+//#define Z_MIN_POS -17.2 //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+#define Z_MIN_POS 0 // pruebas home con inductivo //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+#define X_MAX_POS 240  // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define Y_MAX_POS 350  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 265 // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+*/
+
+/*con cama impresa
+#define X_MIN_POS -44
+#define Y_MIN_POS -96 // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+#define Z_MIN_POS -4.1 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+#define X_MAX_POS 240
+#define Y_MAX_POS 368  //antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 265 // 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+*/
+/* OK bowden dual
+//#define X_MIN_POS -17  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+#define X_MIN_POS -41  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+//#define Y_MIN_POS -69 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+#define Y_MIN_POS -60 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+//#define Z_MIN_POS -17.2 //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define Z_MIN_POS 0 // pruebas home con inductivo //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define X_MAX_POS 246  // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define Y_MAX_POS 350  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 285 // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+*/
+
+/*
+// Ok 3mm diecto gregs
+#define X_MIN_POS -14  // antes del cambio de eje z -46  // -17 con e3dv6 inductivo azul y blower
+#define Y_MIN_POS -82 // cama abs alu 300x200 -69  con e3dv6 inductivo azul y blower  //cama alu madera -62  // antes -44 con carro 20x20 ahora -96 carro 20x30 // -136 esta provisional por el cristal roto
+#define Z_MIN_POS 0 // pruebas home con inductivo //-17.2 g29 madera 300x200  //-17.8 g28 madera 300x200 //-2.7 antes corcho //0.0 es el nozzle lo mas bajo posible y -0.5 sube medio milimetro el nozzle cuanto mayor se el numero negativo mas alto queda el 0// -0.4 es alto es la diferencia con el e3dv6 3mm -1.10 20x20 4mm con capton -1.4 OK// -1.2 cristal 4mm 30x20 sin capton ok g28 // -2.1 cristal 30x20 4mm sin capton ok g29
+
+#define X_MAX_POS 228  // 236 despues de ensanchar eje x dcho  /// 202 antes de ensanchar carro dcho para doble extrusor
+#define Y_MAX_POS 360  // 370 cama 300x200 impresa 350 por precaucion con cadena eje y//cama alu madera 310  ///antes 218 ahora base 300x200 318 // 308  esta provisional por el cristal roto // 368 cama 200x200 con cristal 300x200
+#define Z_MAX_POS 260 // 285 con husillos en z// 245 cama impresa 300x200 z m5 antislash con plate azul doble extrusor inductivo amarilo// 245 cama impresa 300x200 z m5 antislash  y  con e3dv6 inductivo azul y blower// 280 para mk8  // 260 carro intercambiable e3dv6 //265 carro intercambiable e3dv6 cama impresa
+*/
+
+/*  carro intercambiable e3dv6 cama madera
+#define X_MIN_POS -46
+#define Y_MIN_POS -1
+#define Z_MIN_POS 0
+#define X_MAX_POS 200
+#define Y_MAX_POS 200
+#define Z_MAX_POS 260 // 280 para mk8  // 260 carro intercambiable e3dv6
+*/
+
+/* Mi Mk8 Carror original
+  #define X_MIN_POS -51
+  #define Y_MIN_POS -20
+  #define Z_MIN_POS -0.6
+  #define X_MAX_POS 200
+  #define Y_MAX_POS 200
+  #define Z_MAX_POS 280 // 280 para mk8
+*/
+
+
+
+/*
+#define X_MAX_LENGTH 200
+//#define Y_MAX_LENGTH 200  //cama de 200x200
+#define Y_MAX_LENGTH 300   // cama de 300x200
+//#define Z_MAX_LENGTH 270 //  marco madera
+#define Z_MAX_LENGTH 245 //  cadenas
+*/
 
 /**
  * Filament Runout Sensor
@@ -733,11 +1224,14 @@
  * For other boards you may need to define FIL_RUNOUT_PIN.
  * By default the firmware assumes HIGH = has filament, LOW = ran out
  */
-//#define FILAMENT_RUNOUT_SENSOR
+#define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-  #define FIL_RUNOUT_INVERTING false // set to true to invert the logic of the sensor.
+  #define FIL_RUNOUT_INVERTING true // set to true to invert the logic of the sensor.
   #define ENDSTOPPULLUP_FIL_RUNOUT // Uncomment to use internal pullup for filament runout pins if the sensor is defined.
   #define FILAMENT_RUNOUT_SCRIPT "M600"
+  //#define FILAMENT_RUNOUT_SCRIPT "G1 X-44 F8000\nM25"
+
+
 #endif
 
 //===========================================================================
@@ -795,7 +1289,7 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-//#define AUTO_BED_LEVELING_BILINEAR
+#define AUTO_BED_LEVELING_BILINEAR
 
 /**
  * Enable detailed logging of G28, G29, M48, etc.
@@ -811,10 +1305,68 @@
   #define ABL_GRID_MAX_POINTS_Y ABL_GRID_MAX_POINTS_X
 
   // Set the boundaries for probing (where the probe can reach).
+  /*
   #define LEFT_PROBE_BED_POSITION 15
   #define RIGHT_PROBE_BED_POSITION 170
   #define FRONT_PROBE_BED_POSITION 20
   #define BACK_PROBE_BED_POSITION 170
+  */
+
+/*
+//OK dual Vulcano  
+//#define LEFT_PROBE_BED_POSITION 10  // cama 200x200
+#define LEFT_PROBE_BED_POSITION 30  // cama 200x200
+#define RIGHT_PROBE_BED_POSITION 185  // cama 200x200 185 // cama 300x200 eje z nuevo 165
+//#define FRONT_PROBE_BED_POSITION 30    // cama 200x200
+//#define BACK_PROBE_BED_POSITION 195  // cama 200x200
+//#define FRONT_PROBE_BED_POSITION 80  // cristal 300x200
+//#define BACK_PROBE_BED_POSITION 245  //cristal 300x200
+#define FRONT_PROBE_BED_POSITION 20  // cama 300x200
+#define BACK_PROBE_BED_POSITION 255  //cama 300x200
+*/
+
+//  a 0000     son posiciones absolutas sobre 0 en fc
+#define LEFT_PROBE_BED_POSITION 60  // cama 200x200  10
+#define RIGHT_PROBE_BED_POSITION 160  // cama 200x200 185 // cama 300x200 eje z nuevo 165
+#define FRONT_PROBE_BED_POSITION 84  // cama 300x200 112
+#define BACK_PROBE_BED_POSITION 312  //cama 300x200 340
+
+/*
+// 3mm gregs directo
+#define LEFT_PROBE_BED_POSITION 40  // cama 200x200
+#define RIGHT_PROBE_BED_POSITION 180  // cama 200x200 185 // cama 300x200 eje z nuevo 165
+#define FRONT_PROBE_BED_POSITION 30  // cama 300x200
+#define BACK_PROBE_BED_POSITION 285  //cama 300x200
+*/
+/*
+// OK E3vV6 bowden blower 175
+#define LEFT_PROBE_BED_POSITION 10  // cama 200x200
+#define RIGHT_PROBE_BED_POSITION 185  // cama 200x200 185 // cama 300x200 eje z nuevo 165
+#define FRONT_PROBE_BED_POSITION 80  // cristal 300x200
+#define BACK_PROBE_BED_POSITION 245  //cristal 300x200
+*/
+
+
+/* OK bowden dual
+//#define LEFT_PROBE_BED_POSITION 10  // cama 200x200
+#define LEFT_PROBE_BED_POSITION 30  // cama 200x200
+#define RIGHT_PROBE_BED_POSITION 185  // cama 200x200 185 // cama 300x200 eje z nuevo 165
+//#define FRONT_PROBE_BED_POSITION 30    // cama 200x200
+//#define BACK_PROBE_BED_POSITION 195  // cama 200x200
+//#define FRONT_PROBE_BED_POSITION 80  // cristal 300x200
+//#define BACK_PROBE_BED_POSITION 245  //cristal 300x200
+#define FRONT_PROBE_BED_POSITION 20  // cama 300x200
+#define BACK_PROBE_BED_POSITION 255  //cama 300x200
+*/
+
+/*
+// 3mm gregs directo
+#define LEFT_PROBE_BED_POSITION 40  // cama 200x200
+#define RIGHT_PROBE_BED_POSITION 180  // cama 200x200 185 // cama 300x200 eje z nuevo 165
+#define FRONT_PROBE_BED_POSITION 30  // cama 300x200
+#define BACK_PROBE_BED_POSITION 285  //cama 300x200
+*/
+
 
   // The Z probe minimum outer margin (to validate G29 parameters).
   #define MIN_PROBE_EDGE 10
@@ -833,7 +1385,7 @@
     // Experimental Subdivision of the grid by Catmull-Rom method.
     // Synthesizes intermediate points to produce a more detailed mesh.
     //
-    //#define ABL_BILINEAR_SUBDIVISION
+    #define ABL_BILINEAR_SUBDIVISION
     #if ENABLED(ABL_BILINEAR_SUBDIVISION)
       // Number of subdivisions between probe points
       #define BILINEAR_SUBDIVISIONS 3
@@ -859,6 +1411,8 @@
  * Useful to retract or move the Z probe out of the way.
  */
 //#define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
+//#define Z_PROBE_END_SCRIPT "M500\nG1 Z5 Y-20 X0 F12000\nM420 S1" // Graba ajustes en la eeprom centra la cama y aparca el hotend y aplica correcciones   //  para cristal de 300x200
+#define Z_PROBE_END_SCRIPT "G1 Z5 Y-20 X1 F12000\nM420 S1" // Graba ajustes en la eeprom centra la cama y aparca el hotend y aplica correcciones   //  para cristal de 300x200
 
 
 // @section homing
@@ -880,16 +1434,31 @@
 // - If stepper drivers time out, it will need X and Y homing again before Z homing.
 // - Move the Z probe (or nozzle) to a defined XY point before Z Homing when homing all axes (G28).
 // - Prevent Z homing when the Z probe is outside bed area.
-//#define Z_SAFE_HOMING
+#define Z_SAFE_HOMING
 
 #if ENABLED(Z_SAFE_HOMING)
+/*
   #define Z_SAFE_HOMING_X_POINT ((X_MIN_POS + X_MAX_POS) / 2)    // X point for Z homing when homing all axis (G28).
   #define Z_SAFE_HOMING_Y_POINT ((Y_MIN_POS + Y_MAX_POS) / 2)    // Y point for Z homing when homing all axis (G28).
+*/
+//#define Z_SAFE_HOMING_X_POINT (200/2)    // X point for Z homing when homing all axis (G28).
+//#define Z_SAFE_HOMING_Y_POINT (200 / 2)    // Y point for Z homing when homing all axis (G28). cama de 200x200
+#define Z_SAFE_HOMING_Y_POINT (300 / 2)    // Y point for Z homing when homing all axis (G28). cama de 300x200
+//#define Z_SAFE_HOMING_X_POINT (-40)    // X point for Z homing when homing all axis (G28).
+//#define Z_SAFE_HOMING_X_POINT (-44)    // X point for Z homing when homing all axis (G28). iba bien con la base impresa y la cama de aluminio de 300x200
+//efine Z_SAFE_HOMING_X_POINT (0) //-75   // X point for Z homing when homing all axis (G28).//#define Z_SAFE_HOMING_Y_POINT (-15)    // Y point for Z homing when homing all axis (G28).
+#define Z_SAFE_HOMING_X_POINT (200/2)     // 100 centro de la cama para home z inductivo //-75   // X point for Z homing when homing all axis (G28).//#define Z_SAFE_HOMING_Y_POINT (-15)    // Y point for Z homing when homing all axis (G28).
+
 #endif
 
 // Homing speeds (mm/m)
+/*
 #define HOMING_FEEDRATE_XY (50*60)
 #define HOMING_FEEDRATE_Z  (4*60)
+*/
+#define HOMING_FEEDRATE_XY (15000)
+#define HOMING_FEEDRATE_Z  (1800)
+
 
 //=============================================================================
 //============================= Additional Features ===========================
@@ -905,7 +1474,7 @@
 // M501 - reads parameters from EEPROM (if you need reset them after you changed them temporarily).
 // M502 - reverts to the default "factory settings".  You still need to store them in EEPROM afterwards if you want to.
 //define this to enable EEPROM support
-//#define EEPROM_SETTINGS
+#define EEPROM_SETTINGS
 
 #if ENABLED(EEPROM_SETTINGS)
   // To disable EEPROM Serial responses and decrease program space by ~1700 byte: comment this out:
@@ -939,6 +1508,7 @@
 // @section temperature
 
 // Preheat Constants
+/*
 #define PREHEAT_1_TEMP_HOTEND 180
 #define PREHEAT_1_TEMP_BED     70
 #define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
@@ -946,6 +1516,15 @@
 #define PREHEAT_2_TEMP_HOTEND 240
 #define PREHEAT_2_TEMP_BED    110
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
+*/
+#define PREHEAT_1_TEMP_HOTEND 210
+#define PREHEAT_1_TEMP_BED     60
+#define PREHEAT_1_FAN_SPEED     200 // Value from 0 to 255
+
+#define PREHEAT_2_TEMP_HOTEND 230
+#define PREHEAT_2_TEMP_BED    80
+#define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
+
 
 //
 // Nozzle Park -- EXPERIMENTAL
@@ -969,6 +1548,9 @@
 #if ENABLED(NOZZLE_PARK_FEATURE)
   // Specify a park position as { X, Y, Z }
   #define NOZZLE_PARK_POINT { (X_MIN_POS + 10), (Y_MAX_POS - 10), 20 }
+#endif
+#if ENABLED(DEBUG_V_SALIDA)
+    #define value 3.0  // para pruebas de calibracion del voltaje de salida
 #endif
 
 //
@@ -1064,7 +1646,7 @@
 //
 // :{ 'en':'English', 'an':'Aragonese', 'bg':'Bulgarian', 'ca':'Catalan', 'cn':'Chinese', 'cz':'Czech', 'de':'German', 'el':'Greek', 'el-gr':'Greek (Greece)', 'es':'Spanish', 'eu':'Basque-Euskera', 'fi':'Finnish', 'fr':'French', 'gl':'Galician', 'hr':'Croatian', 'it':'Italian', 'kana':'Japanese', 'kana_utf8':'Japanese (UTF8)', 'nl':'Dutch', 'pl':'Polish', 'pt':'Portuguese', 'pt-br':'Portuguese (Brazilian)', 'pt-br_utf8':'Portuguese (Brazilian UTF8)', 'pt_utf8':'Portuguese (UTF8)', 'ru':'Russian', 'tr':'Turkish', 'uk':'Ukrainian', 'test':'TEST' }
 //
-#define LCD_LANGUAGE en
+#define LCD_LANGUAGE es
 
 //
 // LCD Character Set
@@ -1088,7 +1670,7 @@
 //
 // :['JAPANESE', 'WESTERN', 'CYRILLIC']
 //
-#define DISPLAY_CHARSET_HD44780 JAPANESE
+#define DISPLAY_CHARSET_HD44780 WESTERN
 
 //
 // LCD TYPE
@@ -1101,7 +1683,7 @@
 //                 https://github.com/olikraus/U8glib_Arduino
 //
 //#define ULTRA_LCD   // Character based
-//#define DOGLCD      // Full graphics display
+#define DOGLCD      // Full graphics display
 
 //
 // SD CARD
@@ -1109,7 +1691,7 @@
 // SD Card support is disabled by default. If your controller has an SD slot,
 // you must uncomment the following option or it won't work.
 //
-//#define SDSUPPORT
+#define SDSUPPORT
 
 //
 // SD CARD: SPI SPEED
@@ -1126,7 +1708,7 @@
 //
 // Use CRC checks and retries on the SD communication.
 //
-//#define SD_CHECK_AND_RETRY
+#define SD_CHECK_AND_RETRY
 
 //
 // ENCODER SETTINGS
@@ -1157,7 +1739,7 @@
 //
 //  Set this option if CLOCKWISE causes values to DECREASE
 //
-//#define REVERSE_ENCODER_DIRECTION
+#define REVERSE_ENCODER_DIRECTION
 
 //
 // This option reverses the encoder direction for navigating LCD menus.
@@ -1172,7 +1754,7 @@
 //
 // Add individual axis homing items (Home X, Home Y, and Home Z) to the LCD menu.
 //
-//#define INDIVIDUAL_AXIS_HOMING_MENU
+#define INDIVIDUAL_AXIS_HOMING_MENU
 
 //
 // SPEAKER/BUZZER
@@ -1180,7 +1762,7 @@
 // If you have a speaker that can produce tones, enable it here.
 // By default Marlin assumes you have a buzzer with a fixed frequency.
 //
-//#define SPEAKER
+#define SPEAKER
 
 //
 // The duration and frequency for the UI feedback sound.
@@ -1267,7 +1849,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // MakerLab Mini Panel with graphic
@@ -1418,9 +2000,9 @@
 // leaving it undefined or defining as 0 will disable the servo subsystem
 // If unsure, leave commented / disabled
 //
-//#define NUM_SERVOS 3 // Servo index starts with 0 for M280 command
+//#define NUM_SERVOS 1 // Servo index starts with 0 for M280 command
 
-// Delay (in milliseconds) before the next move will start, to give the servo time to reach its target angle.
+// Delay (in microseconds) before the next move will start, to give the servo time to reach its target angle.
 // 300ms is a good value but you can try less delay.
 // If the servo can't reach the requested position, increase it.
 #define SERVO_DELAY 300
